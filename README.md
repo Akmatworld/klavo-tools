@@ -1,5 +1,7 @@
 # KlavoTools
 
+> Автор KlavoTools — [Fenex](https://github.com/Fenex).
+
 Браузерное расширение для сайта [klavogonki.ru](https://klavogonki.ru) на **Manifest V3**.
 
 Это порт [klavotools-kango](https://github.com/Fenex/klavotools-kango) (Manifest V2, Kango
