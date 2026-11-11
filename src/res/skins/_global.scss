@@ -1,0 +1,60 @@
+////
+/// Global userstyle.
+/// @author Vitaliy Busko
+/// @author Daniil Filippov <filippovdaniil@gmail.com>
+////
+
+@import "../settings";
+@import "../colors";
+
+// Override the default Chrome underlines style:
+* {
+  text-decoration-skip-ink: none;
+}
+
+html.skin {
+  .pages .selected {
+    background-color: transparent;
+    font-weight: 700;
+  }
+  #topics-list .item td {
+    height: 40px;
+    padding: 0;
+
+    &.last-post {
+      vertical-align: middle;
+    }
+  }
+  .banner-back, .ownbanner-back, #playads_dummy, #playads {
+    display: none;
+  }
+
+  // Fix the "blurred" avatars issue:
+  .profile-root .journal .comments .icon img,
+  .user-block .drop-btn .name img,
+  .message .my_avatar img {
+    width: 25px !important;
+    height: 25px !important;
+  }
+
+  #posts-list .posth a.user {
+    white-space: nowrap;
+  }
+  #posts-list .posth a.user:before {
+    display: inline-block;
+    margin-right: 0.5ch;
+    vertical-align: middle;
+  }
+
+  @each $id in $organizers-accounts {
+    #posts-list .posth a.user[href="/profile/#{$id}"]:before {
+      content: '\1F3C1'; // 🏁
+    }
+  }
+
+  @each $id in $verified-accounts {
+    #posts-list .posth a.user[href="/profile/#{$id}"]:before {
+      content: "\2705"; // ✅
+    }
+  }
+}

@@ -1,0 +1,245 @@
+<!doctype html>
+<html ng-csp="no-unsafe-eval">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="/icons/button.png">
+  <link type="text/css" rel="stylesheet" href="/res/options.css" />
+  <title>Настройки KlavoTools</title>
+  <script src="/lib/angular.min.js"></script>
+  <script src="/lib/background.js"></script>
+  <script src="options.js"></script>
+  <script src="joke.js"></script>
+</head>
+<body>
+  <div id="head" class="minwidth green-back">
+    <div class="minwidth_holyhack">
+      <div class="minwidth_container">
+
+        <div id="logo">
+          <img src="/icons/klavotools_logo.png" alt="KlavoTools Logo" title="KlavoTools" />
+          <span class="version">
+            Версия: <kts:version />
+          </span>
+        </div>
+
+        <div class="right">
+
+          <div class="login-block">
+            &nbsp;
+          </div>
+
+          <div class="menu">
+            <a kg:path href="https://klavogonki.ru/forum/">Форум</a>
+            <a kg:path href="https://klavogonki.ru/about/">Об игре</a>
+            <a kg:path href="https://klavogonki.ru/vocs/top/">Словари</a>
+            <a kg:path href="https://klavogonki.ru/top/">Рекорды</a>
+            <a kg:path href="https://klavogonki.ru/gamelist/">Игра</a>
+          </div>
+        </div>
+
+        <div style="clear: both;"></div>
+
+      </div>
+    </div>
+  </div>
+  <div id="line"></div>
+  <!--<div class="bar"></div>-->
+
+  <div id="content" class="minwidth">
+
+    <ui:bug></ui:bug>
+
+    <h4>Настройки KlavoTools</h4>
+
+    <b>Глобальные настройки:</b>
+    <form id="KTS_globalSettings" ng:controller="GlobalSettings">
+      <div ng:repeat="setting in settings">
+        <div ng-if="setting.type === 'boolean'">
+          <input type="checkbox" ng-model="setting.value" name="{{setting.name}}" id="KTS_settings_checkbox_{{setting.name}}"/>
+          <label for="KTS_settings_checkbox_{{setting.name}}">{{setting.name | settingDescription}}</label>
+        </div>
+      </div>
+      <div style="margin-left: 24px;">
+        <span>Открывать новые страницы Клавогонок через протокол:</span>
+        <select name="KTS_settings_protocol" ng:model="settings['protocol'].value.type">
+          <option value="prev">тот же, что использовался в последний раз (по-умолчанию)</option>
+          <option value="HTTPS">HTTPS</option>
+          <option value="HTTP">HTTP</option>
+        </select>
+        <div ng:if="settings['protocol'].value.type !== 'prev'">
+          <input type="checkbox" ng:model="settings['protocol'].value.redirect" id="KTS_settings_protocol_redirect" />
+          <label for="KTS_settings_protocol_redirect">Принудительно перегружать страницы через выставленный протокол</label>
+        </div>
+      </div>
+    </form>
+
+    <b>Стили:</b>
+    <form id="KTS_style" ng:controller="StyleCtrl">
+      <div ng-repeat="skin in skins">
+        <input type="radio" id="KTS_style_radio_{{skin}}" ng-model="$parent.active" name="KTS_style_radio" value="{{skin}}" />
+        <label for="KTS_style_radio_{{skin}}">{{skin | skin}}</label>
+      </div>
+      <input type="radio" id="KTS_style_radio_user" name="KTS_style_radio" disabled value="user" />
+      <label for="KTS_style_radio_user"><i>[Здесь мог бы быть ваш стиль]</i></label><br />
+    </form>
+
+    <b>Уведомления:</b>
+    <form id="KTS_notifications" ng:controller="CompetitionCtrl">
+      <table>
+        <tr>
+          <td>
+            <div ng:repeat="(rate, enable) in rates">
+              <label>
+                <input
+                  type="checkbox"
+                  ng:change="change()"
+                  ng:model="rates[rate]"
+                  ng:disabled="delay == 0"
+                  />
+
+                {{rate}}
+              </label>
+            </div>
+          </td>
+          <td>
+            <label for="KTS_notification_delay">Предупреждать за:</label>
+            <select id="KTS_notification_delay" ng-model="delay" convert-to-number>
+              <option value="0">отключить</option>
+              <option value="15">15 сек</option>
+              <option value="20">20 сек</option>
+              <option value="30">30 сек</option>
+              <option value="45">45 сек</option>
+              <option value="60">1 мин</option>
+              <option value="90">1 мин 30 сек</option>
+              <option value="120">2 мин</option>
+              <option value="180">3 мин</option>
+              <option value="300">5 мин</option>
+              <option value="999">Как можно раньше</option>
+            </select>
+          </td>
+          <td>
+            <label>
+              <input type="checkbox" ng:model="audio" />
+              Звуковое оповещение
+            </label>
+          </td>
+        </tr>
+      </table>
+      <div>
+        <label>
+          <input type="checkbox" ng-model="onlyWithPlayers"/>
+          Уведомлять о рейтинговом соревновании только при наличии
+          <input type="number" min="0" ng-model="minimalPlayersNumber" class="number-input" ng-disabled="!onlyWithPlayers"/>
+          и более участников
+        </label>
+      </div>
+      <div id="KTS_raceInvitations" ng:controller="RaceInvitations">
+        <div ng:repeat="setting in settings">
+          <div ng-if="setting.type === 'boolean'">
+            <input type="checkbox" ng-model="setting.value" name="{{setting.name}}" id="KTS_settings_checkbox_{{setting.name}}"/>
+            <label for="KTS_settings_checkbox_{{setting.name}}">{{setting.name | settingDescription}}</label>
+          </div>
+        </div>
+      </div>
+    </form>
+    <b>Скрипты:</b>
+    <form id="KTS_scripts" ng:controller="ScriptCtrl">
+      <div class="userscripts-status" ng-if="status">
+        <div ng-if="status.userScriptsApi">
+          Скрипты загружаются из репозитория
+          <a href="https://github.com/voidmain02/KgScripts" target="_blank">KgScripts</a>
+          и обновляются автоматически.
+          <a href="" ng-click="sync()" ng-hide="syncing">Проверить обновления</a>
+          <span ng-show="syncing">Обновление...</span>
+        </div>
+        <div ng-if="!status.userScriptsApi" class="warning">
+          <p>
+            Используется встроенный в расширение набор скриптов: скрипты не обновляются
+            автоматически, а скрипты, которых нет во встроенном наборе, недоступны.
+          </p>
+          <p ng-if="status.userScriptsPermissionOptional">
+            Чтобы скрипты загружались из репозитория KgScripts и обновлялись автоматически,
+            разрешите расширению выполнять пользовательские скрипты:
+            <button type="button" ng-click="requestPermission()">Разрешить</button>
+          </p>
+          <p ng-if="!status.userScriptsPermissionOptional">
+            Чтобы скрипты загружались из репозитория KgScripts и обновлялись автоматически,
+            откройте страницу расширения (<code>chrome://extensions/?id={{extensionId}}</code>),
+            включите переключатель «Разрешить пользовательские скрипты» (Allow User Scripts)
+            и обновите эту страницу. В Chrome до версии 138 вместо этого нужно включить
+            «Режим разработчика» на странице <code>chrome://extensions</code>.
+          </p>
+        </div>
+      </div>
+      <div>
+        <input type="checkbox" id="showIntegrated" ng-model="showIntegrated" />
+        <label for="showIntegrated">Показывать скрипты из стандартного набора</label>
+      </div>
+      <div>
+        <input type="checkbox" id="showBroken" ng-model="showBroken" />
+        <label for="showBroken">Показывать сломанные скрипты</label>
+      </div>
+      <br>
+      <div>
+        Фильтровать список по тегам:
+        <label
+          class="tag"
+          ng-repeat="tag in tags"
+          ng-class="{active: tag.active}">
+            <input type="checkbox" ng-model="tag.active"/>
+            <span><span>{{tag.text}}</span></span>
+        </label>
+      </div>
+      <table>
+        <tbody>
+          <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Авторы</th>
+            <th>Версия</th>
+          </tr>
+          <tr
+            ng-repeat="(name, data) in scripts | filterByTags:tags"
+            ng-if="(data.integrated === false || showIntegrated === true) && (data.broken === false || showBroken === true)"
+            ng-click="toggle(name, $event)"
+            ng-class="{integrated: data.integrated, broken: data.broken || !data.available}"
+            title="{{data.broken ? 'Скрипт в нерабочем состоянии.' : (!data.available ? 'Скрипт отсутствует во встроенном наборе.' : '')}}"
+            >
+            <td>
+              <input type="checkbox"
+                id="{{name}}"
+                name="{{name}}"
+                class="user_set"
+                negate ng-model="data.disabled"
+                ng-disabled="data.broken || !data.available"
+                ng-change="onChange(name)"
+                />
+              {{name}}
+            </td>
+            <td>{{data.description}}</td>
+            <td>{{data.authors.join(', ')}}</td>
+            <td>{{data.version}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <div id="footer" style="padding: 1px 10px;">
+    <div style="clear: both;">&nbsp;</div>
+    <div class="bar"></div>
+    <table width="100%">
+      <tbody>
+        <tr>
+          <td align="left">
+            <span class="KTS_bottom">KlavoTools. © Vitaliy Busko, 2011 - 2015. Manifest V3 port, 2026.</span>
+          </td>
+          <td align="right">
+            <span id="copyright"></span>
+            <span id="links"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

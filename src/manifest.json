@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "KlavoTools",
+  "version": "4.0.0",
+  "description": "Расширение для сайта klavogonki.ru: уведомления, стили, пользовательские скрипты.",
+  "homepage_url": "https://klavogonki.ru/",
+  "icons": {
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "KlavoTools",
+    "default_icon": "icons/button_default.png",
+    "default_popup": "popup/popup.html"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+  "background": {},
+  "permissions": [
+    "alarms",
+    "contextMenus",
+    "notifications",
+    "scripting",
+    "storage",
+    "tabs",
+    "unlimitedStorage"
+  ],
+  "host_permissions": [
+    "*://klavogonki.ru/*",
+    "*://*.klavogonki.ru/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://klavogonki.ru/*", "*://*.klavogonki.ru/*"],
+      "js": [
+        "content/protocol.js",
+        "content/userstyle.js",
+        "content/auth-state.js"
+      ],
+      "css": ["res/skins.css"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["res/skins.css"],
+      "matches": ["*://klavogonki.ru/*", "*://*.klavogonki.ru/*"]
+    }
+  ]
+}
