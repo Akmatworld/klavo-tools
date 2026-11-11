@@ -1,6 +1,6 @@
 {
   "name": "klavotools",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "KlavoTools — browser extension for klavogonki.ru (Manifest V3)",
   "private": true,
   "type": "module",
