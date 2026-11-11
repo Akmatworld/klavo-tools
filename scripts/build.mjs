@@ -19,7 +19,9 @@ const SRC = path.join(ROOT, 'src');
 const DIST = path.join(ROOT, 'dist');
 const VENDOR = path.join(ROOT, 'vendor', 'KgScripts');
 
-const GECKO_ID = 'klavotools-kango@klavogonki.ru';
+// Own add-on id: the original klavotools-kango@klavogonki.ru belongs to the
+// kango-based extension on addons.mozilla.org.
+const GECKO_ID = 'klavotools@akmatworld';
 
 const args = process.argv.slice(2);
 const targetArg = args.find((arg) => arg.startsWith('--target='));
@@ -98,6 +100,11 @@ async function buildManifest(target) {
             gecko: {
                 id: GECKO_ID,
                 strict_min_version: '128.0',
+                // Required by AMO for new add-ons; the extension collects no data.
+                // Ignored by Firefox versions before 140.
+                data_collection_permissions: {
+                    required: ['none'],
+                },
             },
         };
     }
