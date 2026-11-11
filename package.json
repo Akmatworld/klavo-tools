@@ -6,9 +6,9 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "build": "node scripts/build.mjs",
-    "build:chrome": "node scripts/build.mjs --target=chrome",
-    "build:firefox": "node scripts/build.mjs --target=firefox",
+    "build": "node scripts/build.mjs --zip",
+    "build:chrome": "node scripts/build.mjs --target=chrome --zip",
+    "build:firefox": "node scripts/build.mjs --target=firefox --zip",
     "sync-userscripts": "node scripts/sync-userscripts.mjs",
     "test": "node --test tests/"
   },

@@ -43,10 +43,10 @@ MV3 запрещает выполнять загруженный из сети �
 
 ```bash
 npm install
-npm run build          # dist/chrome и dist/firefox
+npm run build          # dist/chrome, dist/firefox и архивы dist/klavotools-<target>-<version>.zip
 npm run build:chrome   # только Chrome
-npm run build:firefox  # только Firefox
-node scripts/build.mjs --zip   # плюс архивы dist/klavotools-<target>-<version>.zip
+npm run build:firefox  # только Firefox (архив готов к загрузке на addons.mozilla.org)
+node scripts/build.mjs # без архивов, только папки dist/<target>
 npm test               # юнит-тесты (node:test)
 ```
 
